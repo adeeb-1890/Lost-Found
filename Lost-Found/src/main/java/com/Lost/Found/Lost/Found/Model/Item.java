@@ -21,5 +21,4 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private AppUser owner;
-
 }
