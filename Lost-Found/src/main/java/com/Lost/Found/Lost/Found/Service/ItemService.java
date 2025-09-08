@@ -72,10 +72,9 @@ public class ItemService {
         return ItemMapper.itemDTO(item);
     }
     // delete item
-    public String deleteItemById(Long id){
+    public void deleteItemById(Long id){
         Item item = itemRepo.findById(id).orElseThrow(() -> new RuntimeException("No such item exists."));
         itemRepo.delete(item);
-        return "Item has been successfully Removed.";
     }
     // get owner by Item
     public AppUserDTO getOwnerOfItem(Long id){

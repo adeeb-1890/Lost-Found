@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public class Item {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(nullable = false)
     private String name;
     private String type;
     private String location;

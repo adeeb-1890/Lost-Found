@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor @Data @Getter @Setter
+@AllArgsConstructor @Data
 public class AppUser {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
