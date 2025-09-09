@@ -17,11 +17,6 @@ import java.util.List;
 public class AppUserController {
     @Autowired
     private AppUserService appUserService;
-    // register user
-    @PostMapping("/register")
-    public ResponseEntity<AppUserDTO> registerUser(@RequestBody AppUserDTO appUserDTO){
-        return new ResponseEntity<>(appUserService.registerUser(appUserDTO) , HttpStatus.CREATED);
-    }
 
     @GetMapping("/user/{id}")
     public ResponseEntity<AppUserDTO> getUserById(@PathVariable Long id){

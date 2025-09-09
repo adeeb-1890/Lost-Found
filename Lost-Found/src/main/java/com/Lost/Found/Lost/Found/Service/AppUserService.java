@@ -30,19 +30,19 @@ public class AppUserService {
         }
     }
 
-    // Register User
-    public AppUserDTO registerUser(AppUserDTO appUserDTO) {
-        // Validate DTO
-        AppUserValidator.validate(appUserDTO);
-
-        if (appUserRepo.findByEmail(appUserDTO.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists: " + appUserDTO.getEmail());
-        }
-        AppUser appUser = AppUserMapper.toAppUser(appUserDTO);
-
-        appUserRepo.save(appUser);
-        return AppUserMapper.appUserDTO(appUser);
-    }
+//    // Register User
+//    public AppUserDTO registerUser(AppUserDTO appUserDTO) {
+//        // Validate DTO
+//        AppUserValidator.validate(appUserDTO);
+//
+//        if (appUserRepo.findByEmail(appUserDTO.getEmail()).isPresent()) {
+//            throw new RuntimeException("Email already exists: " + appUserDTO.getEmail());
+//        }
+//        AppUser appUser = AppUserMapper.toAppUser(appUserDTO);
+//
+//        appUserRepo.save(appUser);
+//        return AppUserMapper.appUserDTO(appUser);
+//    }
 
     // get user by id
     public AppUserDTO getUserById(Long id){
