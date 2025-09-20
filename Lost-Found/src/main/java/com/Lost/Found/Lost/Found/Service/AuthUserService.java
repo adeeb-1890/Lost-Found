@@ -4,32 +4,35 @@ import com.Lost.Found.Lost.Found.Model.AppUser;
 import com.Lost.Found.Lost.Found.Model.AuthUser;
 import com.Lost.Found.Lost.Found.Repository.AppUserRepo;
 import com.Lost.Found.Lost.Found.Repository.AuthUserRepo;
+import com.Lost.Found.Lost.Found.Security.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.PublicKey;
-
 @Service
 public class AuthUserService {
+
     private final AppUserRepo appUserRepo;
-    private final AuthUserRepo  authUserRepo;
+    private final AuthUserRepo authUserRepo;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil; // Inject JwtUtil
 
-    public AuthUserService(AppUserRepo appUserRepo ,
-                           AuthUserRepo authUserRepo ,
-                           PasswordEncoder passwordEncoder ,
-                           AuthenticationManager authenticationManager){
+    public AuthUserService(AppUserRepo appUserRepo,
+                           AuthUserRepo authUserRepo,
+                           PasswordEncoder passwordEncoder,
+                           AuthenticationManager authenticationManager,
+                           JwtUtil jwtUtil) {
         this.appUserRepo = appUserRepo;
         this.authUserRepo = authUserRepo;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
     }
 
-    // sign Up
+    // ---------------- Signup ----------------
     public String signup(String username, String password, String name, String email, String department) {
         if (authUserRepo.findByUsername(username).isPresent()) {
             throw new RuntimeException("Username already exists");
@@ -52,16 +55,23 @@ public class AuthUserService {
         return "User registered successfully!";
     }
 
+    // ---------------- Login ----------------
     public String login(String username, String password) {
         try {
+            // Authenticate credentials
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
-            return "Login successful!";
+
+            // Fetch user to get role
+            AuthUser authUser = authUserRepo.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Generate JWT
+            return jwtUtil.generateToken(username, authUser.getRole());
+
         } catch (BadCredentialsException e) {
             throw new RuntimeException("Invalid username or password");
         }
     }
-
-
 }

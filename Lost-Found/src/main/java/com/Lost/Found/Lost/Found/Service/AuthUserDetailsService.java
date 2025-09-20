@@ -1,17 +1,13 @@
 package com.Lost.Found.Lost.Found.Service;
 
-import com.Lost.Found.Lost.Found.Model.AppUser;
 import com.Lost.Found.Lost.Found.Model.AuthUser;
-import com.Lost.Found.Lost.Found.Repository.AppUserRepo;
 import com.Lost.Found.Lost.Found.Repository.AuthUserRepo;
+import com.Lost.Found.Lost.Found.Security.AuthUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 
 @Service
 public class AuthUserDetailsService implements UserDetailsService {
@@ -29,11 +25,7 @@ public class AuthUserDetailsService implements UserDetailsService {
         AuthUser authUser = authUserRepo.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found, please sign in"));
 
-        // Return a Spring Security User object
-        return User.builder()
-                .username(authUser.getUsername())
-                .password(authUser.getPassword())
-                .authorities(Collections.emptyList()) // or set roles if you have them
-                .build();
+        // Return AuthUserPrincipal directly (handles roles/authorities)
+        return new AuthUserPrincipal(authUser);
     }
 }

@@ -15,7 +15,6 @@ public class AuthUserController {
         this.authUserService = authUserService;
     }
 
-    // Signup endpoint
     @PostMapping("/signup")
     public String signup(@RequestBody SignupRequest request) {
         return authUserService.signup(
@@ -27,9 +26,9 @@ public class AuthUserController {
         );
     }
 
-    // login
-    @PostMapping ("/login")
+    @PostMapping("/login")
     public String login(@RequestBody LoginRequest loginRequest){
-        return authUserService.login(loginRequest.getUsername() , loginRequest.getPassword());
+        // Returns JWT instead of plain success string
+        return authUserService.login(loginRequest.getUsername(), loginRequest.getPassword());
     }
 }
